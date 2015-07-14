@@ -1,0 +1,313 @@
+package com.thrc.beeway.pager;
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Parcelable;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.thrc.beeway.R;
+import com.thrc.beeway.base.BasePager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * com.thrc.beeway.pager
+ * 创建日期： 2015/7/13.
+ * 版权：天合融创
+ * 作者：余昊.
+ * 版本号：1.0.
+ * 修改历史：
+ */
+public class FuctionPager extends BasePager {
+
+    private ViewPager viewPager; // android-support-v4中的滑动组件
+    private List<ImageView> imageViews; // 滑动的图片集合
+
+    private String[] titles; // 图片标题
+    private int[] imageResId; // 图片ID
+    private List<View> dots; // 图片标题正文的那些点
+
+    private TextView tv_title;
+    private int currentItem = 0; // 当前图片的索引号
+
+    // An ExecutorService that can schedule commands to run after a given delay,
+    // or to execute periodically.
+    private ScheduledExecutorService scheduledExecutorService;
+
+    // 切换当前显示的图片
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            viewPager.setCurrentItem(currentItem);// 切换当前显示的图片
+        }
+
+        ;
+    };
+
+    /*   *//*
+     * 轮播图用到的布局
+	 *//*
+    private View layout_roll_view;
+    *//*
+     *标题的介绍应该也在网络上面动态的获取
+     *//*
+    private List<String> titleList = new ArrayList<String>();
+    *//*
+     * 轮播图中的每个图是从网上动态加载的，因此我们把这些图片地址也放到集合中
+     *//*
+    private List<String> urlImgList = new ArrayList<String>();
+
+    *//*
+     * 轮播图下面的点点也放到集合中
+     *//*
+    private List<View> viewList = new ArrayList<View>();
+    *//*
+    * 用于放轮播图，对的，轮播图是放在线性布局中的
+    *//*
+    @Bind(R.id.top_news_viewpager)
+    LinearLayout top_news_viewpager;
+    *//*
+    * 轮播图图片标题
+    *//*
+    @Bind(R.id.top_title)
+     TextView top_news_title;
+
+    *//*
+     *	轮播图的点点
+     *//*
+    @Bind(R.id.dots_ll)
+    LinearLayout dots_ll;
+    *//*
+    * 自定义（引用第三方）的ListView对象
+    *//*
+    @Bind(R.id.lv_item_news)
+    PullToRefreshListView ptrlv;
+*/
+    public FuctionPager(Context context) {
+
+        super(context);
+        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        // 当Activity显示出来后，每两秒钟切换一次图片显示
+        scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 1, 2, TimeUnit.SECONDS);
+    }
+
+
+    /**
+     * 在initView方法中初始化了两个布局文件
+     * 一个是轮播图
+     * 一个是ListView
+     *
+     * @return 布局
+     */
+    @Override
+    public View initView() {
+      /*  layout_roll_view=View.inflate(context,R.layout.layout_roll_view,null);
+        //ButterKnife.bind(this,layout_roll_view);
+        view=View.inflate(context,R.layout.frag_item_news,null);
+        //ButterKnife.bind(this,view);
+        ptrlv = (PullToRefreshListView) view.findViewById(R.id.lv_item_news);
+
+        // 下拉加载的事件屏蔽
+        ptrlv.setPullLoadEnabled(false);
+        // 包含下拉刷新，上拉加载操作
+        ptrlv.setScrollLoadEnabled(true);
+        *//*
+         * 这个刷新监听是自定义控件类PullToRefreshListView自带的
+		 *//*
+        ptrlv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+				*//*
+				 * 把ListView往下拉时刷新数据
+				 * 获取新数据
+				 *//*
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+				*//*
+				 *  把ListView往上拉时加载更多
+				 *//*
+            }
+        });
+        //条目中的点击事件
+        ptrlv .getRefreshableView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+        return view;*/
+
+        view = View.inflate(context, R.layout.frag_home, null);
+        //viewPager = (ViewPager) view.findViewById(R.id.vp);
+        imageResId = new int[]{R.drawable.a, R.drawable.b, R.drawable.c,};
+        titles = new String[imageResId.length];
+        titles[0] = "长沙晨景";
+        titles[1] = "长沙晚景";
+        titles[2] = "洞庭美景";
+        imageViews = new ArrayList<ImageView>();
+        // 初始化图片资源
+        for (int i = 0; i < imageResId.length; i++) {
+            ImageView imageView = new ImageView(context);
+            imageView.setImageResource(imageResId[i]);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageViews.add(imageView);
+        }
+
+
+        dots = new ArrayList<View>();
+        dots.add(view.findViewById(R.id.v_dot0));
+        dots.add(view.findViewById(R.id.v_dot1));
+        dots.add(view.findViewById(R.id.v_dot2));
+       // dots.add(view.findViewById(R.id.v_dot3));
+       // dots.add(view.findViewById(R.id.v_dot4));
+
+        tv_title = (TextView) view.findViewById(R.id.tv_title);
+        tv_title.setText(titles[0]);//
+        viewPager = (ViewPager) view.findViewById(R.id.vp);
+        viewPager.setAdapter(new MyAdapter());// 设置填充ViewPager页面的适配器
+        // 设置一个监听器，当ViewPager中的页面改变时调用
+        viewPager.setOnPageChangeListener(new MyPageChangeListener());
+        return view;
+    }
+
+
+    /*
+	 * 初始化轮播图的点点们
+	 */
+  /*  private void initDot() {
+        dots_ll.removeAllViews();
+        viewList.clear();
+
+        for (int i = 0; i < urlImgList.size(); i++) {
+            View view = new View(context);
+            if (i == 0) {
+                view.setBackgroundResource(R.drawable.dot_focus);
+            } else {
+                view.setBackgroundResource(R.drawable.dot_normal);
+            }
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(UIUtils.dip2px(6), UIUtils.dip2px(6));
+            view.setLayoutParams(layoutParams);
+            layoutParams.setMargins(5, 0, 5, 0);
+            dots_ll.addView(view);
+            viewList.add(view);
+        }
+    }*/
+
+
+
+    /**
+     * 初始化数据
+     */
+    @Override
+    public void initData() {
+
+    }
+
+
+    /**
+     * 换行切换任务
+     *
+     * @author Administrator
+     */
+    private class ScrollTask implements Runnable {
+
+        public void run() {
+            synchronized (viewPager) {
+                System.out.println("currentItem: " + currentItem);
+                currentItem = (currentItem + 1) % imageViews.size();
+                handler.obtainMessage().sendToTarget(); // 通过Handler切换图片
+            }
+        }
+
+    }
+
+    /**
+     * 当ViewPager中页面的状态发生改变时调用
+     *
+     * @author Administrator
+     */
+    private class MyPageChangeListener implements ViewPager.OnPageChangeListener {
+        private int oldPosition = 0;
+
+        /**
+         * This method will be invoked when a new page becomes selected.
+         * position: Position index of the new selected page.
+         */
+        public void onPageSelected(int position) {
+            currentItem = position;
+            tv_title.setText(titles[position]);
+            dots.get(oldPosition).setBackgroundResource(R.drawable.dot_normal);
+            dots.get(position).setBackgroundResource(R.drawable.dot_focused);
+            oldPosition = position;
+        }
+
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+    }
+
+    /**
+     * 填充ViewPager页面的适配器
+     *
+     * @author Administrator
+     */
+    private class MyAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return imageResId.length;
+        }
+
+        @Override
+        public Object instantiateItem(View arg0, int arg1) {
+            ((ViewPager) arg0).addView(imageViews.get(arg1));
+            return imageViews.get(arg1);
+        }
+
+        @Override
+        public void destroyItem(View arg0, int arg1, Object arg2) {
+            ((ViewPager) arg0).removeView((View) arg2);
+        }
+
+        @Override
+        public boolean isViewFromObject(View arg0, Object arg1) {
+            return arg0 == arg1;
+        }
+
+        @Override
+        public void restoreState(Parcelable arg0, ClassLoader arg1) {
+
+        }
+
+        @Override
+        public Parcelable saveState() {
+            return null;
+        }
+
+        @Override
+        public void startUpdate(View arg0) {
+
+        }
+
+        @Override
+        public void finishUpdate(View arg0) {
+
+        }
+    }
+
+}
