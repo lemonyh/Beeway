@@ -38,7 +38,11 @@ public abstract class BaseFragment extends Fragment{
 		 * 为什么在context中能获取到SlidingMenu对象呢，因为我们的MainActivity
 		 * 是继承了SlidingFragmentActivity类的。
 		 */
-        slidingMenu = ((MainActivity)context).getSlidingMenu();
+        if (context.getClass()==MainActivity.class) {
+            slidingMenu = ((MainActivity)context).getSlidingMenu();
+        }
+
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
