@@ -5,9 +5,9 @@ import android.view.Window;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+import com.thrc.beeway.R;
 import com.thrc.beeway.fragment.HomeFragment;
 import com.thrc.beeway.fragment.MenuFragment;
-import com.thrc.beeway.R;
 
 public class MainActivity extends SlidingFragmentActivity {
     private SlidingMenu slidingMenu;
@@ -99,6 +99,7 @@ public class MainActivity extends SlidingFragmentActivity {
     public HomeFragment switchHomeFragment() {
         return (HomeFragment) getSupportFragmentManager().findFragmentByTag("HOME");
     }
+
 
 
 }

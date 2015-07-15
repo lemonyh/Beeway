@@ -117,4 +117,6 @@ public class BaseActivity  extends ActionBarActivity{
     {
         return mForegroundActivity;
     }
+
+
 }
