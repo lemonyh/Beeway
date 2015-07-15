@@ -37,7 +37,8 @@ public class DetailActivity extends BaseActivity {
         iv_example= (ImageView) findViewById(R.id.iv_example);
         RewardFragment rewardFragment = new RewardFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_detail, rewardFragment, "REWARD")
+        getSupportFragmentManager().beginTransaction().
+                replace(R.id.fl_detail, rewardFragment, "REWARD")
         .commit()
         ;
     }
