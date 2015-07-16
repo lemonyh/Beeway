@@ -5,10 +5,7 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- 每一个模块，都有一个顶部标题 -->
-    <include
-        android:id="@+id/title_bar"
-        layout="@layout/layout_title_bar" />
+
 
     <com.thrc.beeway.widgets.MyViewPager
         android:id="@+id/layout_content"
