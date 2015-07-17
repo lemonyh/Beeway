@@ -34,7 +34,6 @@
             android:drawableTop="@drawable/main_tab_image_bg"
             android:text="足迹" />
 
-
         <RadioButton
             android:id="@+id/main_tab_add"
             android:layout_width="55dp"

@@ -3,10 +3,12 @@ package com.thrc.beeway.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.thrc.beeway.R;
+import com.thrc.beeway.base.BaseFragment;
 import com.thrc.beeway.fragment.RewardFragment;
 
 /**
@@ -35,12 +37,11 @@ public class DetailActivity extends BaseActivity {
         iv_back = (ImageView) findViewById(R.id.iv_back);
         iv_more=(ImageView)findViewById(R.id.iv_more);
         iv_example= (ImageView) findViewById(R.id.iv_example);
-        RewardFragment rewardFragment = new RewardFragment();
+        BaseFragment rewardFragment = new RewardFragment();
 
         getSupportFragmentManager().beginTransaction().
                 replace(R.id.fl_detail, rewardFragment, "REWARD")
-        .commit()
-        ;
+        .commit();
     }
 
     @Override
@@ -64,14 +65,14 @@ public class DetailActivity extends BaseActivity {
             public void onClick(View v) {
                 //Toast.makeText(UIUtils.getContext(), "发送新消息", Toast.LENGTH_SHORT).show();
                 //模拟用户的图片上传
-               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_REQUEST_CODE);*/
-                Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+               /* Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
 
 
-                intent.setType("image/*");//设置选择的类型为图像类型
+                intent.setType("image*//*");//设置选择的类型为图像类型
                 //打开图库按钮
-                startActivityForResult(intent, GALLERY_REQUEST_CODE);
+                startActivityForResult(intent, GALLERY_REQUEST_CODE);*/
 
             }
         });

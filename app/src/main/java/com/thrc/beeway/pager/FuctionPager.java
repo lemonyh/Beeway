@@ -7,8 +7,12 @@ import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.thrc.beeway.R;
 import com.thrc.beeway.activity.DetailActivity;
@@ -40,11 +44,15 @@ public class FuctionPager extends BasePager {
 
     private TextView tv_title;
     private int currentItem = 0; // 当前图片的索引号
-    private ImageView iv_reward;
+    private ImageView iv_reward,iv_treasure,iv_found,iv_myaddress;
 
     // An ExecutorService that can schedule commands to run after a given delay,
     // or to execute periodically.
     private ScheduledExecutorService scheduledExecutorService;
+    private ListView mPullToRefreshListView;
+
+
+
 
     // 切换当前显示的图片
     private Handler handler = new Handler() {
@@ -79,6 +87,12 @@ public class FuctionPager extends BasePager {
         tv_title = (TextView) view.findViewById(R.id.tv_title);
         viewPager = (ViewPager) view.findViewById(R.id.vp);
         iv_reward= (ImageView) view.findViewById(R.id.iv_reward);
+        iv_treasure= (ImageView) view.findViewById(R.id.iv_treasure);
+        iv_myaddress= (ImageView) view.findViewById(R.id.iv_myaddress);
+        iv_found= (ImageView) view.findViewById(R.id.iv_found);
+
+
+        mPullToRefreshListView= (ListView) view .findViewById(R.id.lv_item_news);
         return view;
     }
 
@@ -125,6 +139,26 @@ public class FuctionPager extends BasePager {
                 context.startActivity(intent);
             }
         });
+
+        iv_treasure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"点击了宝藏按钮",Toast.LENGTH_SHORT).show();
+            }
+        });
+        iv_myaddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"点击了我的按钮",Toast.LENGTH_SHORT).show();
+            }
+        });
+        iv_treasure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,"点击了发现按钮",Toast.LENGTH_SHORT).show();
+            }
+        });
+        mPullToRefreshListView.setAdapter(new FunctionPagerAdapter());
     }
 
 
@@ -137,7 +171,6 @@ public class FuctionPager extends BasePager {
 
         public void run() {
             synchronized (viewPager) {
-                System.out.println("currentItem: " + currentItem);
                 currentItem = (currentItem + 1) % imageViews.size();
                 handler.obtainMessage().sendToTarget(); // 通过Handler切换图片
             }
@@ -220,6 +253,38 @@ public class FuctionPager extends BasePager {
         @Override
         public void finishUpdate(View arg0) {
 
+        }
+    }
+
+
+
+
+    private  class   FunctionPagerAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return titles.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            if (titles!=null){
+                return titles[position];
+            }
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView==null){
+                convertView =View.inflate(context,R.layout.item_temp,null);
+            }
+            return convertView;
         }
     }
 
