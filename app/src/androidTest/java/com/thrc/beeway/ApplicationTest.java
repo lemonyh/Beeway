@@ -10,5 +10,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public ApplicationTest() {
         super(Application.class);
         System.out.print(true);
+        System.out.print(000);
     }
 }
